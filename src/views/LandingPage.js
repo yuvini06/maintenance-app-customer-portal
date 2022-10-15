@@ -24,7 +24,11 @@ class LandingPage extends React.Component {
     super(props);
 
     this.state = {
-      chartHeaders: [],
+      chartHeaders: {},
+      barChart: { data: [], options: {} },
+      pieChart: { data: [], options: {} },
+      bubbleChart: { data: [], options: {} },
+      donutChart: { data: [], options: {} },
     };
   }
 
@@ -37,30 +41,38 @@ class LandingPage extends React.Component {
       results.forEach((header) => {
         chartHeaders = { ...chartHeaders, ...header };
       });
-      this.setState({ chartHeaders });
+      this.setState({
+        chartHeaders,
+        barChart: { data: barChartData, options: barChartOptions },
+        pieChart: { data: pieChartData, options: pieChartOptions },
+        bubbleChart: { data: bubbleChartData, options: bubbleChartOptions },
+        donutChart: { data: donutChartData, options: donutChartOptions },
+      });
     } catch (e) {
       this.props.setErrorStatus(true);
     }
   }
 
   render() {
+    const { chartHeaders, barChart, bubbleChart, pieChart, donutChart } =
+      this.state;
     return (
       <>
         <header className="page-header">
           <h1>Customer Dashboard</h1>
         </header>
-        {!this.props.isError && (
+        {!this.props.isError && Object.keys(chartHeaders).length > 0 && (
           <Dashboard
             className="container"
-            chartHeaders={this.state.chartHeaders}
-            barChartData={barChartData}
-            barChartOptions={barChartOptions}
-            pieChartData={pieChartData}
-            pieChartOptions={pieChartOptions}
-            bubbleChartData={bubbleChartData}
-            bubbleChartOptions={bubbleChartOptions}
-            donutChartData={donutChartData}
-            donutChartOptions={donutChartOptions}
+            chartHeaders={chartHeaders}
+            barChartData={barChart.data}
+            barChartOptions={barChart.options}
+            pieChartData={pieChart.data}
+            pieChartOptions={pieChart.options}
+            bubbleChartData={bubbleChart.data}
+            bubbleChartOptions={bubbleChart.options}
+            donutChartData={donutChart.data}
+            donutChartOptions={donutChart.options}
           />
         )}
       </>
